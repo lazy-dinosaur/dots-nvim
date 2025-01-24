@@ -37,7 +37,7 @@ return {
       desc = "Lists open buffers",
     },
     {
-      "\\t",
+      "\\h",
       function()
         require("fzf-lua").help_tags()
       end,

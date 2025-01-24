@@ -2,6 +2,7 @@ return {
   {
     "vhyrro/luarocks.nvim",
     priority = 1001, -- this plugin needs to run before anything else
+    config = true,
     opts = {
       rocks = { "magick" },
     },
@@ -411,6 +412,33 @@ return {
           end
         end,
       }):map("<leader>um")
+    end,
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = function()
+      require("lazy").load({ plugins = { "markdown-preview.nvim" } })
+      vim.fn["mkdp#util#install"]()
+    end,
+    ft = { "markdown", "vimwiki" },
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown", "vimwiki" }
+      vim.g.mkdp_theme = "dark"
+      vim.g.mkdp_auto_start = 0
+      vim.g.mkdp_auto_close = 1
+      vim.g.mkdp_refresh_slow = 0
+    end,
+    keys = {
+      {
+        "<leader>cp",
+        ft = { "markdown", "vimwiki" },
+        "<cmd>MarkdownPreviewToggle<cr>",
+        desc = "Markdown Preview",
+      },
+    },
+    config = function()
+      vim.cmd([[do FileType]])
     end,
   },
 }
