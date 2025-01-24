@@ -46,7 +46,7 @@ return {
           ["core.journal"] = {
             config = {
               workspace = "journal",
-              journal_folder = "daily",
+              journal_folder = ".",
               strategy = "flat",
             },
           },
