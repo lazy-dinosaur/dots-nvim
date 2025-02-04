@@ -3,7 +3,7 @@
 -- Add any additional keymaps here
 --
 local keymap = vim.keymap
-local opts = { noremap = false, silent = true }
+-- local opts = { noremap = false, silent = true }
 
 keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 

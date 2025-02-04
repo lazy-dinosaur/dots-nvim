@@ -6,6 +6,11 @@
 vim.g.VM_leader = "<leader>m"
 vim.g.VM_mouse_mappings = 0
 
+-- Memory management
+vim.opt.maxmempattern = 2000 -- 패턴 매칭 메모리 제한
+vim.opt.history = 100 -- 명령어 기록 제한
+vim.opt.hidden = false -- 버퍼 숨김 비활성화로 메모리 관리
+
 -- views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
@@ -18,9 +23,9 @@ vim.opt.writebackup = false -- 쓰기 전 백업 비활성화
 vim.opt.undofile = true -- 영구적인 undo 히스토리 저장
 
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- undo 파일 저장 위치  mkdir -p ~/.vim/undodir
-vim.opt.undolevels = 10000 -- undo 가능한 최대 변경사항 수
+vim.opt.undolevels = 1000 -- undo 가능한 최대 변경사항 수
 
 -- File watching and auto-reload optimizations
 vim.opt.autoread = true -- 외부 변경 감지
 vim.opt.autowrite = true -- 자동 저장
-vim.opt.updatetime = 250 -- 더 빠른 업데이트 시간
+-- vim.opt.updatetime = 1000 -- 더 빠른 업데이트 시간
