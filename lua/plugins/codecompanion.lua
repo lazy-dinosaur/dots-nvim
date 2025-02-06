@@ -3,16 +3,42 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
+    {
+      -- support for image pasting
+      "HakonHarnes/img-clip.nvim",
+      event = "VeryLazy",
+      opts = {
+        -- recommended settings
+        default = {
+          embed_image_as_base64 = false,
+          prompt_for_file_name = false,
+          drag_and_drop = {
+            insert_mode = true,
+          },
+          -- required for Windows users
+          use_absolute_path = true,
+        },
+      },
+    },
+    {
+      "MeanderingProgrammer/render-markdown.nvim",
+      ft = { "markdown", "codecompanion" },
+    },
   },
   config = function()
     require("codecompanion").setup({
-      language = "ko_KR",
+      opts = {
+        language = "한국어",
+      },
       adapters = {
         openai = function()
           return require("codecompanion.adapters").extend("openai", {
+            env = {
+              endpoint = "https://api.openai.com/v1",
+            },
             schema = {
               model = {
-                default = "gpt-4",
+                default = "gpt-4o",
               },
             },
           })
@@ -29,6 +55,15 @@ return {
       auto_complete = true,
       format_on_save = true,
       display = {
+        chat = {
+          intro_message = "Welcome to CodeCompanion ✨! Press ? for options",
+          show_header_separator = false, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
+          separator = "─", -- The separator between the different messages in the chat buffer
+          show_references = true, -- Show references (from slash commands and variables) in the chat buffer?
+          show_settings = false, -- Show LLM settings at the top of the chat buffer?
+          show_token_count = true, -- Show the token count for each response?
+          start_in_insert_mode = false, -- Open the chat buffer in insert mode?
+        },
         action_palette = {
           width = 95,
           height = 10,

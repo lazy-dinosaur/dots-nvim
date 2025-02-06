@@ -55,7 +55,7 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
-      file_types = { "markdown", "norg", "rmd", "org" },
+      file_types = { "markdown", "norg", "rmd", "org", "codecompanion" },
       latex = {
         enabled = true,
         converter = "latex2text",
