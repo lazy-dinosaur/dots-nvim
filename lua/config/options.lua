@@ -3,7 +3,7 @@
 -- Add any additional options here
 
 -- vim multi-cursor keymaps
-vim.g.VM_leader = "<leader>m"
+vim.g.VM_leader = "<localleader>m"
 vim.g.VM_mouse_mappings = 0
 
 -- Memory management
@@ -28,4 +28,8 @@ vim.opt.undolevels = 1000 -- undo 가능한 최대 변경사항 수
 -- File watching and auto-reload optimizations
 vim.opt.autoread = true -- 외부 변경 감지
 vim.opt.autowrite = true -- 자동 저장
--- vim.opt.updatetime = 1000 -- 더 빠른 업데이트 시간
+vim.opt.updatetime = 250 -- 더 빠른 업데이트 시간
+
+-- Buffer behavior
+vim.opt.autoread = true -- 외부 변경 감지
+vim.opt.autowrite = true -- 자동 저장
