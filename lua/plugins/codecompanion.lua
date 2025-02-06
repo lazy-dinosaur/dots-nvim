@@ -6,16 +6,13 @@ return {
   },
   config = function()
     require("codecompanion").setup({
-      language = "ko-KR", -- Hypothetical example
+      language = "ko_KR",
       adapters = {
         openai = function()
           return require("codecompanion.adapters").extend("openai", {
-            env = {
-              endpoint = "https://api.openai.com/v1",
-            },
             schema = {
               model = {
-                default = "gpt-4o",
+                default = "gpt-4",
               },
             },
           })
