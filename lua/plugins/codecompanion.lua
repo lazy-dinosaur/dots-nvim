@@ -6,19 +6,43 @@ return {
   },
   config = function()
     require("codecompanion").setup({
-
+      language = "ko-KR", -- Hypothetical example
+      adapters = {
+        openai = function()
+          return require("codecompanion.adapters").extend("openai", {
+            env = {
+              endpoint = "https://api.openai.com/v1",
+            },
+            schema = {
+              model = {
+                default = "gpt-4o",
+              },
+            },
+          })
+        end,
+      },
       strategies = {
         chat = {
-          adapter = "anthropic",
+          adapter = "openai",
         },
         inline = {
-          adapter = "anthropic",
+          adapter = "openai",
         },
       },
-      -- 여기에 필요한 설정 옵션을 추가하세요
-      -- 예: 자동 완성, 코드 포맷팅, 키맵핑 등
       auto_complete = true,
       format_on_save = true,
-    })
+      display = {
+        action_palette = {
+          width = 95,
+          height = 10,
+          prompt = "Prompt ", -- Prompt used for interactive LLM calls
+          provider = "default", -- default|telescope|mini_pick
+          opts = {
+            show_default_actions = true, -- Show the default actions in the action palette?
+            show_default_prompt_library = true, -- Show the default prompt library in the action palette?
+          },
+        },
+      },
+    })
   end,
 }
