@@ -40,4 +40,5 @@ keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add to Chat" }
 -- keymap.set("n", "<leader>ad", "<cmd>CodeCompanionChat Document<cr>", { desc = "Document Code" })
 
 -- Command abbreviation
+keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Enter Normal mode from Terminal mode" })
 vim.cmd([[cab cc CodeCompanion]])

@@ -10,7 +10,7 @@ return {
       dim_inactive = {
         enabled = false, -- dims the background color of inactive window
         shade = "dark",
-        percentage = 0.15, -- percentage of the shade to apply to the inactive window
+        percentage = 1.15, -- percentage of the shade to apply to the inactive window
       },
       color_overrides = {
         all = {
@@ -64,7 +64,7 @@ return {
             ok = { "underline" },
           },
           inlay_hints = {
-            background = true,
+            background = false,
           },
         },
         nvim_surround = true,

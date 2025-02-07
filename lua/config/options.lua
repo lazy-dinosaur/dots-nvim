@@ -29,7 +29,3 @@ vim.opt.undolevels = 1000 -- undo 가능한 최대 변경사항 수
 vim.opt.autoread = true -- 외부 변경 감지
 vim.opt.autowrite = true -- 자동 저장
 vim.opt.updatetime = 250 -- 더 빠른 업데이트 시간
-
--- Buffer behavior
-vim.opt.autoread = true -- 외부 변경 감지
-vim.opt.autowrite = true -- 자동 저장
