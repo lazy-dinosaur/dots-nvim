@@ -34,12 +34,11 @@ return {
       "catppuccin/nvim",
       "nvim-tree/nvim-tree.lua",
     },
-    config = true,
-    -- opts = {
-    --   win = {
-    --     style = "nvim_aider",
-    --     -- position = "right",
-    --   },
-    -- },
+    opts = {
+      win = {
+        style = "nvim_aider",
+        position = "bottom",
+      },
+    },
   },
 }

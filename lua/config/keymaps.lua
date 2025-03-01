@@ -34,10 +34,10 @@ keymap.set({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", { de
 keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add to Chat" })
 
 -- -- Normal 모드 전용
--- keymap.set("n", "<leader>ae", "<cmd>CodeCompanionChat Explain<cr>", { desc = "Explain Code" })
--- keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat Review<cr>", { desc = "Review Code" })
--- keymap.set("n", "<leader>af", "<cmd>CodeCompanionChat Fix<cr>", { desc = "Fix Code" })
--- keymap.set("n", "<leader>ad", "<cmd>CodeCompanionChat Document<cr>", { desc = "Document Code" })
+keymap.set("n", "<leader>ae", "<cmd>CodeCompanionChat Explain<cr>", { desc = "Explain Code" })
+keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat Review<cr>", { desc = "Review Code" })
+keymap.set("n", "<leader>af", "<cmd>CodeCompanionChat Fix<cr>", { desc = "Fix Code" })
+keymap.set("n", "<leader>ad", "<cmd>CodeCompanionChat Document<cr>", { desc = "Document Code" })
 
 -- Command abbreviation
 keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Enter Normal mode from Terminal mode" })
