@@ -1,13 +1,10 @@
 return {
-  "ibhagwan/fzf-lua",
-  dependencies = {
-    "nvim-tree/nvim-web-devicons",
-  },
+  "folke/snacks.nvim",
   keys = {
     {
       "<leader>fP",
       function()
-        require("fzf-lua").files({
+        Snacks.picker.files({
           cwd = require("lazy.core.config").options.root,
         })
       end,
@@ -16,7 +13,7 @@ return {
     {
       "\\f",
       function()
-        require("fzf-lua").files({
+        Snacks.picker.files({
           hidden = true,
         })
       end,
@@ -25,75 +22,72 @@ return {
     {
       "\\r",
       function()
-        require("fzf-lua").live_grep()
+        Snacks.picker.grep({
+          live = true,
+        })
       end,
       desc = "Search for a string in your current working directory and get results live as you type",
     },
     {
       "\\\\",
       function()
-        require("fzf-lua").buffers()
+        Snacks.picker.buffers()
       end,
       desc = "Lists open buffers",
     },
     {
       "\\h",
       function()
-        require("fzf-lua").help_tags()
+        Snacks.picker.help()
       end,
       desc = "Lists available help tags",
     },
     {
       "\\;",
       function()
-        require("fzf-lua").resume()
+        Snacks.picker.resume()
       end,
-      desc = "Resume the previous fzf-lua picker",
+      desc = "Resume the previous picker",
     },
     {
       "\\e",
       function()
-        require("fzf-lua").diagnostics_document()
+        Snacks.picker.diagnostics()
       end,
       desc = "Lists Diagnostics for all open buffers",
     },
     {
       "\\s",
       function()
-        require("fzf-lua").lsp_document_symbols()
+        Snacks.picker.lsp_symbols()
       end,
       desc = "Lists Function names, variables, from LSP",
     },
   },
   opts = {
-    winopts = {
-      height = 0.85,
-      width = 0.80,
-      row = 0.35,
-      col = 0.50,
-      border = "rounded",
-      preview = {
-        horizontal = "right:50%",
-        layout = "horizontal",
-        scrollbar = false,
+    picker = {
+      winopts = {
+        height = 0.85,
+        width = 0.80,
+        row = 0.35,
+        col = 0.50,
+        border = "rounded",
+        preview = {
+          horizontal = "right:50%",
+          layout = "horizontal",
+          scrollbar = false,
+        },
       },
-    },
-    keymap = {
-      builtin = {
-        ["<C-u>"] = "preview-page-up",
-        ["<C-d>"] = "preview-page-down",
-        ["<PageUp>"] = "preview-page-up",
-        ["<PageDown>"] = "preview-page-down",
+      keymap = {
+        builtin = {
+          ["<C-u>"] = "preview-page-up",
+          ["<C-d>"] = "preview-page-down",
+          ["<PageUp>"] = "preview-page-up",
+          ["<PageDown>"] = "preview-page-down",
+        },
       },
-    },
-    fzf_opts = {
-      ["--layout"] = "reverse",
-    },
-    file_browser = {
-      dir_icon = "",
-      mappings = {
-        ["N"] = "create",
-        ["h"] = "parent_dir",
+      fzf_opts = {
+        ["--layout"] = "reverse",
       },
     },
   },
