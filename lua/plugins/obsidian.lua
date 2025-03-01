@@ -106,12 +106,12 @@ return {
           end,
           opts = { buffer = true },
         },
-        -- ["<cr>"] = {
-        --   action = function()
-        --     return require("obsidian").util.smart_action()
-        --   end,
-        --   opts = { buffer = true, expr = true },
-        -- },
+        ["<A-CR>"] = {
+          action = function()
+            return require("obsidian").util.smart_action()
+          end,
+          opts = { buffer = true, expr = true },
+        },
       },
       new_notes_location = "notes_subdir",
       note_id_func = function()
@@ -178,18 +178,8 @@ return {
       search_max_lines = 1000,
       open_notes_in = "current",
       callbacks = {
-        enter_note = function(client, note)
-          -- 새 버퍼에서만 매핑 생성
-          if vim.bo.filetype == "markdown" then
-            vim.keymap.set("n", "<cr>", function()
-              return require("obsidian").util.smart_action()
-            end, { buffer = true, expr = true })
-          end
-        end,
 
         pre_write_note = function(client, note)
-          -- 현재 버퍼에서 <cr> 매핑 제거
-          vim.keymap.del("n", "<cr>", { buffer = true })
           local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
           local content = table.concat(lines, "\n")
           -- 첫 번째 헤딩 추출
