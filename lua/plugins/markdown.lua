@@ -1,4 +1,48 @@
 return {
+  -- {
+  --   "epwalsh/obsidian.nvim",
+  --   version = "*",
+  --   event = {
+  --     "BufReadPre " .. vim.fn.expand("~") .. "/vaults/**.md",
+  --     "BufNewFile " .. vim.fn.expand("~") .. "/vaults/**.md",
+  --   },
+  --   dependencies = {
+  --     "nvim-treesitter",
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   opts = function()
+  --     return {
+  --       workspaces = {
+  --       {
+  --         name = "personal",
+  --         path = "~/vaults/personal",
+  --       },
+  --     },
+  --     completion = {
+  --       nvim_cmp = true,
+  --       min_chars = 2,
+  --     },
+  --     new_notes_location = "current_dir",
+  --     wiki_link_func = function(opts)
+  --       if opts.id == nil then
+  --         return string.format("[[%s]]", opts.label)
+  --       elseif opts.label ~= opts.id then
+  --         return string.format("[[%s|%s]]", opts.id, opts.label)
+  --       else
+  --         return string.format("[[%s]]", opts.id)
+  --       end
+  --     end,
+  --     mappings = {
+  --       ["gf"] = {
+  --         action = function()
+  --           return require("obsidian").util.gf_passthrough()
+  --         end,
+  --         opts = { noremap = false, expr = true, buffer = true },
+  --       },
+  --       },
+  --     }
+  --   end,
+  -- },
   {
     "vhyrro/luarocks.nvim",
     priority = 1001, -- this plugin needs to run before anything else
@@ -8,50 +52,61 @@ return {
     },
   },
   {
-    "3rd/image.nvim",
-    dependencies = { "luarocks.nvim" },
-    config = function()
-      require("image").setup({
-        backend = "kitty",
-        kitty_method = "normal",
-        processor = "magick_rock", -- or "magick_cli"
-        integrations = {
-          markdown = {
-            enabled = true,
-            clear_in_insert_mode = false,
-            download_remote_images = true,
-            only_render_image_at_cursor = false,
-            floating_windows = false, -- if true, images will be rendered in floating markdown windows
-            filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
-          },
-          neorg = {
-            enabled = true,
-            filetypes = { "norg" },
-          },
-          typst = {
-            enabled = true,
-            filetypes = { "typst" },
-          },
-          html = {
-            enabled = false,
-          },
-          css = {
-            enabled = false,
-          },
-        },
-        max_width = nil,
-        max_height = nil,
-        max_width_window_percentage = nil,
-        max_height_window_percentage = 50,
-        window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
-        window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "snacks_notif", "scrollview", "scrollview_sign" },
-        editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
-        tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" }, -- render image files as images when opened
-      })
-    end,
-    event = "VeryLazy",
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      image = {
+        -- your image configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+    },
   },
+  -- {
+  --   "3rd/image.nvim",
+  --   dependencies = { "luarocks.nvim" },
+  --   config = function()
+  --     require("image").setup({
+  --       backend = "kitty",
+  --       kitty_method = "normal",
+  --       processor = "magick_rock", -- or "magick_cli"
+  --       integrations = {
+  --         markdown = {
+  --           enabled = true,
+  --           clear_in_insert_mode = true,
+  --           download_remote_images = true,
+  --           only_render_image_at_cursor = true,
+  --           floating_windows = true, -- if true, images will be rendered in floating markdown windows
+  --           filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+  --         },
+  --         neorg = {
+  --           enabled = true,
+  --           filetypes = { "norg" },
+  --         },
+  --         typst = {
+  --           enabled = true,
+  --           filetypes = { "typst" },
+  --         },
+  --         html = {
+  --           enabled = false,
+  --         },
+  --         css = {
+  --           enabled = false,
+  --         },
+  --       },
+  --       max_width = nil,
+  --       max_height = nil,
+  --       max_width_window_percentage = nil,
+  --       max_height_window_percentage = 50,
+  --       window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
+  --       window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "snacks_notif", "scrollview", "scrollview_sign" },
+  --       editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
+  --       tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+  --       hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" }, -- render image files as images when opened
+  --     })
+  --   end,
+  --   event = "VeryLazy",
+  -- },
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
