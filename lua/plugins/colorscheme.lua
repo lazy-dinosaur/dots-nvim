@@ -12,17 +12,17 @@ return {
         shade = "dark",
         percentage = 1.15, -- percentage of the shade to apply to the inactive window
       },
-      color_overrides = {
-        all = {
-          -- text = "#ffffff",
-        },
-        mocha = {
-          -- base = "#1e1e2e",
-        },
-        frappe = {},
-        macchiato = {},
-        latte = {},
-      },
+      -- color_overrides = {
+      --   all = {
+      --     -- text = "#ffffff",
+      --   },
+      --   mocha = {
+      --     -- base = "#1e1e2e",
+      --   },
+      --   frappe = {},
+      --   macchiato = {},
+      --   latte = {},
+      -- },
       default_integrations = true,
       integrations = {
         headlines = true,
