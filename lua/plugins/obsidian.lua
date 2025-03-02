@@ -29,7 +29,7 @@ return {
       map("n", "<localleader>bo", "<cmd>ObsidianBridgeOn<CR>", map_opts) -- 활성화
       map("n", "<localleader>bx", "<cmd>ObsidianBridgeOff<CR>", map_opts) -- 비활성화
     end,
-  },
+  }, -- 여기에 누락된 콤마 추가
   {
     "epwalsh/obsidian.nvim",
     config = function(_, opts)
@@ -187,68 +187,68 @@ return {
                     vim.cmd("bdelete! " .. vim.fn.fnameescape(full_path))
                     vim.cmd("silent! !rm " .. vim.fn.fnameescape(full_path))
 
-                    -- 백링크 업데이트 부분
-                    local vault_path = vim.fn.expand("~/vaults/notes") -- 홈 디렉토리 확장
-                    local grep_cmd = string.format(
-                      "rg -l '\\[\\[%s\\]\\]' %s",
-                      vim.fn.shellescape(old_filename_no_ext),
-                      vim.fn.shellescape(vault_path)
-                    )
-                    local result = vim.fn.systemlist(grep_cmd)
+                    -- 백링크 업데이트 부분 (한글 지원 강화)
+                    local vault_path = vim.fn.expand("~/vaults/notes")
+                    local Path = require("plenary.path")
+                    local scan = require("plenary.scandir")
 
-                    for _, file in ipairs(result) do
-                      -- macOS와 리눅스 모두에서 작동하는 sed 명령어
-                      local sed_cmd
-                      if vim.fn.has("mac") == 1 then
-                        -- macOS의 경우
-                        sed_cmd = string.format(
-                          "sed -i '' 's/\\[\\[%s\\]\\]/\\[\\[%s\\]\\]/g' %s",
-                          vim.fn.shellescape(old_filename_no_ext),
-                          vim.fn.shellescape(new_filename_no_ext),
-                          vim.fn.shellescape(file)
-                        )
-                      else
-                        -- Linux 등 다른 시스템의 경우
-                        sed_cmd = string.format(
-                          "sed -i 's/\\[\\[%s\\]\\]/\\[\\[%s\\]\\]/g' %s",
-                          vim.fn.shellescape(old_filename_no_ext),
-                          vim.fn.shellescape(new_filename_no_ext),
-                          vim.fn.shellescape(file)
-                        )
-                      end
-                      vim.fn.system(sed_cmd)
+                    -- 볼트 내 모든 마크다운 파일 찾기
+                    local function find_all_markdown_files(dir)
+                      return scan.scan_dir(dir, { search_pattern = "%.md$", hidden = false, depth = 10 })
                     end
 
-                    -- 마크다운 링크 업데이트 부분도 수정
-                    local md_link_grep = string.format(
-                      "rg -l '\\[.*\\](%s\\.md)' %s",
-                      vim.fn.shellescape(old_filename_no_ext),
-                      vim.fn.shellescape(vault_path)
-                    )
-                    local md_result = vim.fn.systemlist(md_link_grep)
-
-                    for _, file in ipairs(md_result) do
-                      local sed_cmd
-                      if vim.fn.has("mac") == 1 then
-                        sed_cmd = string.format(
-                          "sed -i '' 's/\\(\\[.*\\]\\)(%s\\.md)/\\1(%s\\.md)/g' %s",
-                          vim.fn.shellescape(old_filename_no_ext),
-                          vim.fn.shellescape(new_filename_no_ext),
-                          vim.fn.shellescape(file)
-                        )
-                      else
-                        sed_cmd = string.format(
-                          "sed -i 's/\\(\\[.*\\]\\)(%s\\.md)/\\1(%s\\.md)/g' %s",
-                          vim.fn.shellescape(old_filename_no_ext),
-                          vim.fn.shellescape(new_filename_no_ext),
-                          vim.fn.shellescape(file)
-                        )
+                    -- 파일 내용에서 백링크 업데이트
+                    local function update_links_in_file(file_path, old_name, new_name)
+                      local path = Path:new(file_path)
+                      if not path:exists() then
+                        return
                       end
-                      vim.fn.system(sed_cmd)
+
+                      local content = path:read()
+                      if not content then
+                        return
+                      end
+
+                      local updated = false
+
+                      -- 1. 별칭 없는 위키 링크 처리
+                      local wiki_pattern_simple = "%[%[%s*" .. vim.pesc(old_name) .. "%s*%]%]"
+                      local wiki_replace_simple = "[[" .. new_name .. "]]"
+                      if content:match(wiki_pattern_simple) then
+                        content = content:gsub(wiki_pattern_simple, wiki_replace_simple)
+                        updated = true
+                      end
+
+                      -- 2. 별칭 있는 위키 링크 처리
+                      local wiki_pattern_alias = "%[%[%s*" .. vim.pesc(old_name) .. "%s*|%s*(.-)%s*%]%]"
+                      local wiki_replace_alias = "[[" .. new_name .. "|%1]]"
+                      if content:match(wiki_pattern_alias) then
+                        content = content:gsub(wiki_pattern_alias, wiki_replace_alias)
+                        updated = true
+                      end
+
+                      -- 마크다운 링크 형식 [텍스트](old_name.md) -> [텍스트](new_name.md) 업데이트
+                      local md_pattern = "(%[.-%])%(" .. vim.pesc(old_name) .. "%.md%)"
+                      local md_replace = "%1(" .. new_name .. ".md)"
+                      if content:match(md_pattern) then
+                        content = content:gsub(md_pattern, md_replace)
+                        updated = true
+                      end
+
+                      -- 파일이 변경된 경우에만 저장
+                      if updated then
+                        path:write(content, "w")
+                        print("✓ 백링크 업데이트 완료: " .. file_path)
+                      end
+                    end
+
+                    -- 모든 마크다운 파일에서 백링크 업데이트 수행
+                    local all_md_files = find_all_markdown_files(vault_path)
+                    for _, file_path in ipairs(all_md_files) do
+                      update_links_in_file(file_path, old_filename_no_ext, new_filename_no_ext)
                     end
 
                     -- 노트 경로 업데이트
-                    local Path = require("plenary.path")
                     note.path = Path:new(new_path)
                   end)
                   if ok then
