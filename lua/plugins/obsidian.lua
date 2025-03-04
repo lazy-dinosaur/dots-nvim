@@ -123,8 +123,9 @@ return {
       note_frontmatter_func = function(note)
         local out = {
           id = note.id,
-          -- aliases = note.aliases,
           tags = note.tags,
+          publish = "",
+          series = "",
           createdAt = os.date("%Y-%m-%d %H:%M:%S"), -- 생성 시간 추가
           modifiedAt = os.date("%Y-%m-%d %H:%M:%S"), -- 생성 시간 추가
         }
