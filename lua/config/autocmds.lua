@@ -11,3 +11,47 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown" },
   command = "setlocal nospell",
 })
+
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "oil",
+--   callback = function()
+--     vim.cmd("CodeiumDisable")
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "aider",
+--   callback = function()
+--     vim.cmd("CodeiumDisable")
+--   end,
+-- })
+--
+-- -- Re-enable Codeium when leaving oil buffer
+-- vim.api.nvim_create_autocmd("BufLeave", {
+--   pattern = "*",
+--   callback = function(args)
+--     if vim.bo[args.buf].filetype == "oil" then
+--       vim.cmd("CodeiumEnable")
+--     end
+--   end,
+-- })
+--
+-- -- Disable Codeium for aider buffers
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = "*",
+--   callback = function(args)
+--     if vim.bo[args.buf].filetype == "aider" then
+--       vim.cmd("CodeiumDisable")
+--     end
+--   end,
+-- })
+--
+-- -- Re-enable Codeium when leaving aider buffer
+-- vim.api.nvim_create_autocmd("BufLeave", {
+--   pattern = "*",
+--   callback = function(args)
+--     if vim.bo[args.buf].filetype == "aider" then
+--       vim.cmd("CodeiumEnable")
+--     end
+--   end,
+-- })
