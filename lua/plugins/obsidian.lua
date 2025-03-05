@@ -145,6 +145,9 @@ return {
                 replace = notification_id, -- 이전 알림 ID로 대체
               })
 
+              -- 배포 성공 기록 남기기 (파일에 기록하거나 메시지 출력)
+              vim.notify("배포가 성공적으로 완료되었습니다.", vim.log.levels.INFO)
+
               -- 성공 로그 (필요시)
               if #stdout_data > 0 then
                 vim.defer_fn(function()
