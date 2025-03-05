@@ -174,7 +174,7 @@ return {
       search_max_lines = 1000,
       open_notes_in = "current",
       callbacks = {
-        pre_write_note = function(client, note)
+        pre_write_note = function(_, note)
           local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
           local content = table.concat(lines, "\n")
           local first_heading = content:match("#%s*(.-)\n")
