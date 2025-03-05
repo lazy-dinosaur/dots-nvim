@@ -39,12 +39,28 @@ return {
       local map_opts = { noremap = true, silent = true }
 
       local function deploy_to_blog()
-        -- 배포 스크립트 실행
-        local blog_path = vim.fn.expand("~/Development/my-blog") -- 경로 확장
+        if not vim.g.opts then
+          vim.notify("❌ opts가 설정되지 않았습니다!", vim.log.levels.ERROR)
+          return
+        end
 
-        -- 명령어 준비
-        local cmd =
-          string.format("cd %s && git checkout blog && bun run deploy && git checkout -", vim.fn.shellescape(blog_path))
+        local blog_config = vim.g.opts.blog_config or {}
+        local blog_path = blog_config.path and vim.fn.expand(blog_config.path) or vim.fn.expand("~/Development/my-blog")
+        local branch = blog_config.branch or "blog"
+        local vault_path = blog_config.vault_path and vim.fn.expand(blog_config.vault_path)
+          or vim.fn.expand("~/vaults/notes")
+
+        -- 디버깅용 출력
+        print("📌 blog_path:", blog_path)
+        print("📌 branch:", branch)
+        print("📌 vault_path:", vault_path)
+
+        -- 명령어에 동적 값 적용
+        local cmd = string.format(
+          "cd %s && git checkout %s && bun run deploy && git checkout -",
+          vim.fn.shellescape(blog_path),
+          vim.fn.shellescape(branch)
+        )
 
         -- 디버깅용 로그
         vim.notify("📋 실행 명령어: " .. cmd, vim.log.levels.DEBUG)
@@ -338,8 +354,27 @@ return {
                     vim.cmd("bdelete! " .. vim.fn.fnameescape(full_path))
                     vim.cmd("silent! !rm " .. vim.fn.fnameescape(full_path))
 
-                    -- 백링크 업데이트 부분 (한글 지원 강화)
-                    local vault_path = vim.fn.expand("~/vaults/notes")
+                    local function get_workspace_root()
+                      local full_path = vim.fn.expand("%:p")
+                      local current_dir = vim.fn.fnamemodify(full_path, ":h")
+
+                      -- Git 루트 찾기
+                      local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+                      if vim.fn.isdirectory(git_root) == 1 then
+                        return git_root
+                      end
+
+                      -- `.obsidian` 폴더가 있으면 그걸 기준으로 루트 찾기
+                      local obsidian_root = vim.fn.finddir(".obsidian", current_dir .. ";")
+                      if obsidian_root and #obsidian_root > 0 then
+                        return vim.fn.fnamemodify(obsidian_root, ":h")
+                      end
+
+                      -- 기본적으로 현재 파일이 있는 최상위 디렉터리 사용
+                      return current_dir
+                    end
+
+                    local vault_path = get_workspace_root()
                     local Path = require("plenary.path")
                     local scan = require("plenary.scandir")
 

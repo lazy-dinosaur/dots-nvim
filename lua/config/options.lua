@@ -32,3 +32,10 @@ vim.opt.updatetime = 250 -- 더 빠른 업데이트 시간
 
 -- Line break settings
 vim.opt.linebreak = true -- 단어 단위 줄바꿈 활성화
+
+-- 블로그 배포 관련 설정을 전역 변수로 저장
+vim.g.blog_config = {
+  path = "~/Development/my-blog", -- 블로그 저장소 경로
+  branch = "blog", -- 배포용 브랜치
+  vault_path = "~/vaults/notes", -- 옵시디언 볼트 경로
+}
