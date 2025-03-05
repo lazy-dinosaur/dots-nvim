@@ -39,12 +39,12 @@ return {
       local map_opts = { noremap = true, silent = true }
 
       local function deploy_to_blog()
-        if not vim.g.opts then
+        if not vim.g.blog_config then
           vim.notify("❌ opts가 설정되지 않았습니다!", vim.log.levels.ERROR)
           return
         end
 
-        local blog_config = vim.g.opts.blog_config or {}
+        local blog_config = vim.g.blog_config or {}
         local blog_path = blog_config.path and vim.fn.expand(blog_config.path) or vim.fn.expand("~/Development/my-blog")
         local branch = blog_config.branch or "blog"
         local vault_path = blog_config.vault_path and vim.fn.expand(blog_config.vault_path)
@@ -62,8 +62,8 @@ return {
           vim.fn.shellescape(branch)
         )
 
-        -- 디버깅용 로그
-        vim.notify("📋 실행 명령어: " .. cmd, vim.log.levels.DEBUG)
+        -- -- 디버깅용 로그
+        -- vim.notify("📋 실행 명령어: " .. cmd, vim.log.levels.DEBUG)
 
         -- 로딩 애니메이션을 위한 변수
         -- 더 부드러운 애니메이션을 위한 프레임 증가
