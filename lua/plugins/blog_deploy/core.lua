@@ -44,7 +44,11 @@ function M.deploy_to_blog()
   local stderr_data = {}
 
   -- 기존 알림 모두 제거 (배포 관련 알림만 제거하려면 filter 옵션 추가)
-  notify.dismiss({ title = notify_title }) -- 블로그 배포 제목을 가진 알림만 제거
+  notify.dismiss({
+    title = notify_title,
+    pending = true,
+    silent = true,
+  }) -- 블로그 배포 제목을 가진 알림만 제거
 
   -- 알림 ID 저장용 변수
   local notification_id
@@ -59,19 +63,22 @@ function M.deploy_to_blog()
 
   -- 로딩 애니메이션 시작 - 타이머 간격을 150ms로 줄여 더 부드럽게
   timer = vim.loop.new_timer()
-  timer:start(
-    100,
-    50,
-    vim.schedule_wrap(function()
-      current_frame = (current_frame % #spinner_frames) + 1
-      notification_id = notify("배포 진행 중... " .. spinner_frames[current_frame], vim.log.levels.INFO, {
-        title = notify_title,
-        icon = "🔄",
-        timeout = false,
-        replace = notification_id, -- 이전 알림 ID로 대체
-      })
-    end)
-  )
+
+  if timer ~= nil then
+    timer:start(
+      100,
+      50,
+      vim.schedule_wrap(function()
+        current_frame = (current_frame % #spinner_frames) + 1
+        notification_id = notify("배포 진행 중... " .. spinner_frames[current_frame], vim.log.levels.INFO, {
+          title = notify_title,
+          icon = "🔄",
+          timeout = false,
+          replace = notification_id, -- 이전 알림 ID로 대체
+        })
+      end)
+    )
+  end
 
   -- 작업 실행
   vim.fn.jobstart(cmd, {
@@ -95,7 +102,7 @@ function M.deploy_to_blog()
     end,
     on_exit = function(_, code)
       -- 타이머 정리
-      if timer then
+      if timer ~= nil then
         timer:stop()
         timer:close()
       end
