@@ -19,8 +19,18 @@ function M.deploy_to_blog()
   if current_branch ~= branch then
     vim.fn.system("git -C " .. blog_path .. " checkout " .. branch)
   end
+  -- 블로그 경로에서 bun run sync 실행
+  local sync_cmd = "cd " .. vim.fn.shellescape(blog_path) .. " && bun run sync"
+  local sync_result = vim.fn.system(sync_cmd)
+
+  -- 동기화 작업이 실패한 경우
+  if vim.fn.stridx(sync_result, "error") >= 0 then
+    vim.notify("❌ 동기화 작업에 실패했습니다: " .. sync_result, vim.log.levels.ERROR)
+    return
+  end
 
   local has_changes = vim.fn.system("git -C " .. blog_path .. " status --porcelain") ~= ""
+
   if not has_changes then
     vim.notify("변경된 파일이 없습니다. 배포를 중지합니다.", vim.log.levels.INFO)
     return
