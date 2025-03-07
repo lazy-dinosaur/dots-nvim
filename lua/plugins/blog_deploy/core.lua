@@ -14,6 +14,18 @@ function M.deploy_to_blog()
   local branch = blog_config.branch or "blog"
   local vault_path = blog_config.vault_path and vim.fn.expand(blog_config.vault_path) or vim.fn.expand("~/vaults/notes")
 
+  local current_branch = vim.fn.system("git -C " .. blog_path .. " rev-parse --abbrev-ref HEAD"):gsub("%s+", "")
+
+  if current_branch ~= branch then
+    vim.fn.system("git -C " .. blog_path .. " checkout " .. branch)
+  end
+
+  local has_changes = vim.fn.system("git -C " .. blog_path .. " status --porcelain") ~= ""
+  if not has_changes then
+    vim.notify("변경된 파일이 없습니다. 배포를 중지합니다.", vim.log.levels.INFO)
+    return
+  end
+
   -- 디버깅용 출력
   print("📌 blog_path:", blog_path)
   print("📌 branch:", branch)
@@ -21,9 +33,8 @@ function M.deploy_to_blog()
 
   -- 명령어에 동적 값 적용
   local cmd = string.format(
-    "cd %s && git checkout %s && bun run deploy && git checkout -",
-    vim.fn.shellescape(blog_path),
-    vim.fn.shellescape(branch)
+    "cd %s && git pull && git add . && git commit -m 'update post' && git push",
+    vim.fn.shellescape(blog_path)
   )
 
   -- -- 디버깅용 로그
