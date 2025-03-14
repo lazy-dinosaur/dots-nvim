@@ -111,15 +111,15 @@ return {
         },
       },
       new_notes_location = "notes_subdir",
-      note_id_func = function()
-        local suffix = ""
-        for _ = 1, 4 do
-          suffix = suffix .. string.char(math.random(65, 90))
-        end
-        return tostring(os.time()) .. "-" .. suffix
-      end,
+      -- note_id_func = function()
+      --   local suffix = ""
+      --   for _ = 1, 4 do
+      --     suffix = suffix .. string.char(math.random(65, 90))
+      --   end
+      --   return tostring(os.time()) .. "-" .. suffix
+      -- end,
       note_path_func = function(spec)
-        local path = spec.dir / tostring(spec.title or "untitled")
+        local path = spec.dir / tostring(spec.title or "무제")
         return path:with_suffix(".md")
       end,
       wiki_link_func = "use_alias_only",
@@ -130,7 +130,6 @@ return {
       disable_frontmatter = false,
       note_frontmatter_func = function(note)
         local out = {
-          id = note.id,
           tags = note.tags,
           publish = "",
           series = "",
