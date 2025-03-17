@@ -111,13 +111,6 @@ return {
         },
       },
       new_notes_location = "notes_subdir",
-      -- note_id_func = function()
-      --   local suffix = ""
-      --   for _ = 1, 4 do
-      --     suffix = suffix .. string.char(math.random(65, 90))
-      --   end
-      --   return tostring(os.time()) .. "-" .. suffix
-      -- end,
       note_path_func = function(spec)
         local path = spec.dir / tostring(spec.title or "무제")
         return path:with_suffix(".md")
@@ -133,6 +126,7 @@ return {
           tags = note.tags,
           publish = "",
           series = "",
+          related = "",
           createdAt = os.date("%Y-%m-%d %H:%M:%S"), -- 생성 시간 추가
           modifiedAt = os.date("%Y-%m-%d %H:%M:%S"), -- 생성 시간 추가
         }
@@ -176,7 +170,19 @@ return {
         pre_write_note = function(_, note)
           local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
           local content = table.concat(lines, "\n")
-          local first_heading = content:match("#%s*(.-)\n")
+          -- 첫 번째 헤딩 찾기 (여러 패턴 시도)
+          -- 패턴 1: 문서 시작 부분의 # 헤딩
+          local first_heading = content:match("^#%s+(.-)[\r\n]")
+
+          -- 패턴 2: 문서 중간의 # 헤딩
+          if not first_heading then
+            first_heading = content:match("\n#%s+(.-)[\r\n]")
+          end
+
+          -- 패턴 3: 더 관대한 패턴 (줄 끝이 아닌 어떤 문자든 허용)
+          if not first_heading then
+            first_heading = content:match("#%s+([^\r\n]+)")
+          end
           if first_heading and #first_heading > 0 then
             first_heading = first_heading:gsub('[/\\:*?"<>|]', "_"):gsub("^%s*(.-)%s*$", "%1")
             if #first_heading > 0 then
@@ -330,7 +336,7 @@ return {
         },
       },
       attachments = {
-        img_folder = "_assets/imgs",
+        img_folder = "_assets/attachments",
         img_name_func = function()
           return string.format("%s-", os.time())
         end,
