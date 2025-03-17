@@ -4,7 +4,7 @@ return {
     event = "VeryLazy",
     opts = {
       default = {
-        dir_path = "_assets/imgs",
+        dir_path = "_assets/attachments",
       },
     },
   },
