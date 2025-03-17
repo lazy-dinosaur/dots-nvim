@@ -42,6 +42,15 @@ return {
       ["gx"] = "actions.open_external",
       ["g."] = "actions.toggle_hidden",
       ["g\\"] = "actions.toggle_trash",
+      ["<leader>P"] = function()
+        local oil = require("oil")
+        local filename = oil.get_cursor_entry().name
+        local dir = oil.get_current_dir()
+        oil.close()
+
+        local img_clip = require("img-clip")
+        img_clip.paste_image({}, dir .. filename)
+      end,
     },
     use_default_keymaps = false,
     buf_options = {
