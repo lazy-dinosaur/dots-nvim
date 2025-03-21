@@ -35,9 +35,16 @@ return {
       "nvim-tree/nvim-tree.lua",
     },
     opts = {
+      aider_cmd = "aider",
+      args = {
+        "--no-auto-commits",
+      },
+      picker_cfg = {
+        preset = "vscode",
+      },
       win = {
         style = "nvim_aider",
-        position = "bottom",
+        position = "right",
       },
     },
   },
