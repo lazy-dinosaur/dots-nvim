@@ -103,7 +103,7 @@ return {
           end,
           opts = { buffer = true },
         },
-        ["<CR>"] = {
+        ["<A-CR>"] = {
           action = function()
             return require("obsidian").util.smart_action()
           end,
