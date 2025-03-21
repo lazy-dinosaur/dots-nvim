@@ -82,9 +82,9 @@ return {
       daily_notes = {
         folder = "0.inbox/0.daily",
         date_format = "%Y-%m-%d",
-        alias_format = "%B %-d, %Y",
+        alias_format = "%Y-%m-%d",
         default_tags = { "daily" },
-        template = nil,
+        template = "daily",
       },
       completion = {
         nvim_cmp = true,
@@ -103,7 +103,7 @@ return {
           end,
           opts = { buffer = true },
         },
-        ["<A-CR>"] = {
+        ["<CR>"] = {
           action = function()
             return require("obsidian").util.smart_action()
           end,
@@ -150,7 +150,7 @@ return {
         vim.fn.jobstart({ "qlmanage", "-p", img })
       end,
       use_advanced_uri = false,
-      open_app_foreground = false,
+      open_app_foreground = true,
       picker = {
         name = "fzf-lua",
         note_mappings = {
