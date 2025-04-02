@@ -27,18 +27,18 @@ end, { desc = "Copy relative file path" })
 
 -- CodeCompanion 키맵
 -- Normal 및 Visual 모드 공통
-keymap.set({ "n", "v" }, "<leader>at", "<cmd>CodeCompanionActions<cr>", { desc = "CodeCompanion Actions" })
-keymap.set({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle Chat" })
+-- keymap.set({ "n", "v" }, "<leader>at", "<cmd>CodeCompanionActions<cr>", { desc = "CodeCompanion Actions" })
+-- keymap.set({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle Chat" })
 
 -- Visual 모드 전용
-keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add to Chat" })
+-- keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add to Chat" })
 
 -- -- Normal 모드 전용
-keymap.set("n", "<leader>ae", "<cmd>CodeCompanionChat Explain<cr>", { desc = "Explain Code" })
-keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat Review<cr>", { desc = "Review Code" })
-keymap.set("n", "<leader>af", "<cmd>CodeCompanionChat Fix<cr>", { desc = "Fix Code" })
-keymap.set("n", "<leader>ad", "<cmd>CodeCompanionChat Document<cr>", { desc = "Document Code" })
+-- keymap.set("n", "<leader>ae", "<cmd>CodeCompanionChat Explain<cr>", { desc = "Explain Code" })
+-- keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat Review<cr>", { desc = "Review Code" })
+-- keymap.set("n", "<leader>af", "<cmd>CodeCompanionChat Fix<cr>", { desc = "Fix Code" })
+-- keymap.set("n", "<leader>ad", "<cmd>CodeCompanionChat Document<cr>", { desc = "Document Code" })
 
 -- Command abbreviation
 keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Enter Normal mode from Terminal mode" })
-vim.cmd([[cab cc CodeCompanion]])
+-- vim.cmd([[cab cc CodeCompanion]])

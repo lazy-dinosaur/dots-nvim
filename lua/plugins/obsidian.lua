@@ -61,7 +61,7 @@ return {
       map("n", "<localleader>ot", "<cmd>ObsidianTags<CR>", map_opts) -- 태그 검색
       -- 기타
       map("n", "<localleader>oo", "<cmd>ObsidianOpen<CR>", map_opts) -- Obsidian 앱에서 열기
-      map("n", "<localleader>op", "<cmd>PasteImage<CR>", map_opts) -- 이미지 붙여넣기
+      map("n", "<localleader>op", "<cmd>ObsidianPaste<CR>", map_opts) -- 이미지 붙여넣기
     end,
     version = "*", -- recommended, use latest release instead of latest commit
     lazy = false,
