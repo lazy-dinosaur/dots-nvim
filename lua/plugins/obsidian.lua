@@ -31,9 +31,79 @@ return {
     end,
   },
   {
-    "epwalsh/obsidian.nvim",
+    "obsidian-nvim/obsidian.nvim",
     config = function(_, opts)
       require("obsidian").setup(opts)
+
+      -- OneDrive 동기화를 위한 Autocommand 추가
+      local obsidian_sync_group = vim.api.nvim_create_augroup("ObsidianOneDriveSync", { clear = true })
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        group = obsidian_sync_group,
+        pattern = "*.md", -- 마크다운 파일에 대해서만 실행
+        callback = function(args)
+          local current_buf_path = vim.api.nvim_buf_get_name(args.buf)
+          if current_buf_path == "" then
+            return -- 이름 없는 버퍼는 무시
+          end
+
+          local is_in_obsidian_vault = false
+          if opts.workspaces then
+            for _, ws in ipairs(opts.workspaces) do
+              -- 경로 확장 및 정규화 (예: ~ 처리)
+              local expanded_ws_path = vim.fn.expand(ws.path)
+              -- 경로 끝에 슬래시가 없으면 추가하여 정확한 디렉토리 비교 보장
+              if not expanded_ws_path:find("[\\/]$") then
+                expanded_ws_path = expanded_ws_path .. "/"
+              end
+              -- 현재 파일 경로가 작업 공간 경로로 시작하는지 확인
+              if current_buf_path:find(expanded_ws_path, 1, true) == 1 then
+                is_in_obsidian_vault = true
+                break
+              end
+            end
+          end
+
+          -- 파일이 Obsidian Vault 내에 있을 경우 동기화 실행
+          if is_in_obsidian_vault then
+            vim.notify(
+              "Obsidian 노트 저장됨, OneDrive 동기화 시작...",
+              vim.log.levels.INFO,
+              { title = "Obsidian" }
+            )
+            vim.fn.jobstart({ "onedrive", "--sync" }, {
+              detach = true, -- Neovim을 차단하지 않고 백그라운드에서 실행
+              on_exit = function(_, code)
+                if code == 0 then
+                  vim.notify(
+                    "OneDrive 동기화가 성공적으로 시작되었습니다.",
+                    vim.log.levels.INFO,
+                    { title = "Obsidian Sync" }
+                  )
+                else
+                  vim.notify(
+                    "OneDrive 동기화 명령 실패 (코드: " .. code .. ")",
+                    vim.log.levels.ERROR,
+                    { title = "Obsidian Sync" }
+                  )
+                end
+              end,
+              on_stderr = function(_, data)
+                if data then
+                  local err_msg = table.concat(data, "\n")
+                  if err_msg ~= "" then
+                    vim.notify(
+                      "OneDrive 동기화 오류:\n" .. err_msg,
+                      vim.log.levels.WARN,
+                      { title = "Obsidian Sync" }
+                    )
+                  end
+                end
+              end,
+            })
+          end
+        end,
+      })
+
       -- localleader o로 시작하는 키맵 설정
       local map = vim.keymap.set
       local map_opts = { noremap = true, silent = true }
@@ -76,6 +146,10 @@ return {
           name = "notes",
           path = "~/vaults/notes",
         },
+        {
+          name = "notes",
+          path = "~/OneDrive/앱/remotely-save/notes",
+        },
       },
       notes_subdir = "0.inbox",
       log_level = vim.log.levels.INFO,
@@ -87,7 +161,8 @@ return {
         template = "daily",
       },
       completion = {
-        nvim_cmp = true,
+        nvim_cmp = false,
+        blink = true,
         min_chars = 2,
       },
       mappings = {
@@ -152,7 +227,7 @@ return {
       use_advanced_uri = false,
       open_app_foreground = true,
       picker = {
-        name = "fzf-lua",
+        name = "snacks.pick",
         note_mappings = {
           new = "<C-x>",
           insert_link = "<C-l>",
@@ -305,23 +380,34 @@ return {
         end,
       },
       ui = {
-        enable = true,
-        update_debounce = 200,
-        max_file_length = 5000,
+        enable = false, -- set to false to disable all additional syntax features
+        update_debounce = 200, -- update delay after a text change (in milliseconds)
+        max_file_length = 5000, -- disable UI features for files with more than this many lines
+        -- Define how various check-boxes are displayed
         checkboxes = {
+          -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
           [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-          ["x"] = { char = "", hl_group = "ObsidianDone" },
-          [">"] = { char = "", hl_group = "ObsidianRightArrow" },
+          ["x"] = { char = "", hl_group = "ObsidianDone" },
+          [">"] = { char = "", hl_group = "ObsidianRightArrow" },
           ["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
-          ["!"] = { char = "", hl_group = "ObsidianImportant" },
+          ["!"] = { char = "", hl_group = "ObsidianImportant" },
+          -- Replace the above with this if you don't have a patched font:
+          -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
+          -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
+
+          -- You can also add more custom ones...
         },
+        -- Use bullet marks for non-checkbox lists.
         bullets = { char = "•", hl_group = "ObsidianBullet" },
-        external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
+        external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
+        -- Replace the above with this if you don't have a patched font:
+        -- external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
         reference_text = { hl_group = "ObsidianRefText" },
         highlight_text = { hl_group = "ObsidianHighlightText" },
         tags = { hl_group = "ObsidianTag" },
         block_ids = { hl_group = "ObsidianBlockID" },
         hl_groups = {
+          -- The options are passed directly to `vim.api.nvim_set_hl()`. See `:help nvim_set_hl`.
           ObsidianTodo = { bold = true, fg = "#f78c6c" },
           ObsidianDone = { bold = true, fg = "#89ddff" },
           ObsidianRightArrow = { bold = true, fg = "#f78c6c" },

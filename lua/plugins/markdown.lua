@@ -1,5 +1,14 @@
 return {
   {
+    "brianhuster/live-preview.nvim",
+    dependencies = {
+      -- You can choose one of the following pickers
+      "nvim-telescope/telescope.nvim",
+      "ibhagwan/fzf-lua",
+      "echasnovski/mini.pick",
+    },
+  },
+  {
     "vhyrro/luarocks.nvim",
     priority = 1001, -- this plugin needs to run before anything else
     config = true,
