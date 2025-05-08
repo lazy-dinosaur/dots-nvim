@@ -33,7 +33,7 @@ end, { desc = "Copy relative file path" })
 -- Visual 모드 전용
 -- keymap.set("v", "ga", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add to Chat" })
 
--- -- Normal 모드 전용
+-- Normal 모드 전용
 -- keymap.set("n", "<leader>ae", "<cmd>CodeCompanionChat Explain<cr>", { desc = "Explain Code" })
 -- keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat Review<cr>", { desc = "Review Code" })
 -- keymap.set("n", "<leader>af", "<cmd>CodeCompanionChat Fix<cr>", { desc = "Fix Code" })
